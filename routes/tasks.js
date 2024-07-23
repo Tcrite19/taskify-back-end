@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
 
-// Get all tasks
 router.get("/", async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -12,7 +11,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create a new task
 router.post("/", async (req, res) => {
   const task = new task({
     title: req.body.title,
@@ -27,7 +25,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update a task
 router.put("/:id", async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -44,7 +41,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a task
 router.delete("/:id", async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
@@ -57,14 +53,16 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Get a single task by ID
-router.get("/:id", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
-    if (!task) {
-      return res.status(404).json({ message: "task not found" });
+    const name = req.query.name;
+    if (name) {
+      const tasks = await Task.find({ name: { $regex: new RegExp(name, "i") } });
+      res.json(tasks);
+    } else {
+      const tasks = await Task.find();
+      res.json(tasks);
     }
-    res.json(task);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
