@@ -1,21 +1,20 @@
-require("dotenv").config();
+const app = express();
+const port = process.env.PORT || 3000;
+
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const taskRoutes = require("./routes/tasks");
-// const authRoutes = require('./routes/authRoutes');
+const authRoutes = require("./routes/authRoutes");
+const tasksRoutes = require("./routes/tasksRoutes");
 const serviceRoutes = require('./routes/serviceRoutes');
-const bookingRoutes = require('./routes/bookingRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+// const bookingRoutes = require('./routes/bookingRoutes');
+const logoutRoutes = require('./routes/logout');
 const methodOverride = require('method-override');
 const connectToDatabase = require("./connection");
 const usersRouter = require('./controllers/users');
 const jwt = require('jsonwebtoken');
-
-const app = express();
-const port = process.env.PORT || 3000;
-
 
 
 app.use(bodyParser.json());
@@ -23,14 +22,12 @@ app.use(cors());
 app.use(express.json());
 connectToDatabase();
 
-
+app.use('/auth', authRoutes);
 app.use('/users', usersRouter);
-// app.use('/auth', authRoutes);
 app.use('/services', serviceRoutes);
-app.use('/booking', bookingRoutes);
-app.use('/tasks', taskRoutes);
-app.use('/reviews', reviewRoutes);
-// app.use('/payment', paymentRoutes);
+// app.use('/booking', bookingRoutes);
+app.use('/tasks', tasksRoutes);
+app.use('/logout', logoutRoutes);
 app.use(methodOverride('_method'));
 
 

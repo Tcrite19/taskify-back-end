@@ -4,13 +4,10 @@ const Task = require('../models/Task');
 
 const seedTasks = async () => {
   try {
-    // Connect to the database
     await connectToDatabase();
 
-    // Clear the collection before seeding
     await Task.deleteMany({});
 
-    // Seed data
     const tasks = [
       {
         "_id": 1,
