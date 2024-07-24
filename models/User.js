@@ -1,5 +1,5 @@
-// const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 // const userSchema = new mongoose.Schema({
 //     username: { type: String, required: false, unique: true },
@@ -10,27 +10,27 @@
 //     address: { type: String, required: false }
 // });
 
+const userSchema = new Schema({
+  username: { type: String, required: false, unique: true },
+  hashedPassword: { type: String, required: true },
+});
+
 // userSchema.set('toJSON', {
 //     transform: (document, returnedObject) => {
 //         delete returnedObject.hashedPassword;
 //     }
 // });
 
-
 // userSchema.methods.comparePassword = function(password) {
 //     return bcrypt.compare(password, this.hashedPassword);
 // };
 
-// const User = mongoose.model('User', userSchema);
-
-// module.exports = User;
-
-
-const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  hashedPassword: { type: String, required: true }
+userSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    delete returnedObject.hashedPassword;
+  },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
