@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-const UserSchema = new Schema({
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    isTasker: { type: Boolean, default: false }
+}, { timestamps: true });
+
+userSchema.pre('save', function(next) {
+    let hash = bcrypt.hashSync(this.password, 12);
+    this.password = hash;
+    next();
 });
 
-module.exports = mongoose.model('User', UserSchema);
+// create the model and export it
+const User = mongoose.model('User', userSchema);
+
+// make this model avaliable for the index file
+module.exports = User;
