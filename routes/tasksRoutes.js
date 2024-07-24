@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
+const verifyToken = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const task = new task({
     title: req.body.title,
     artist: req.body.artist,
@@ -25,7 +26,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -41,7 +42,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
     if (!task) {
@@ -53,7 +54,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const name = req.query.name;
     if (name) {

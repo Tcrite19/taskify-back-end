@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
+
+router.get('/sign-token', (req, res) => {
+  res.json({ message: 'You are authorized!' });
+});
+
 router.get('/sign-token', (req, res) => {
   const user = {
     _id: 1,
@@ -24,9 +29,9 @@ router.post('/verify-token', (req, res) => {
 });
 
 
-
   
   
   
 
 module.exports = router;
+

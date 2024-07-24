@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-const isLoggedIn = require('../middleware/isLoggedIn');
 
-router.get('/', isLoggedIn, async (req, res) => {
+
+router.get('/', async (req, res) => {
     try {
         const bookings = await Task.find({ userId: req.user._id });
         res.render('profile', { user: req.user, bookings: bookings });

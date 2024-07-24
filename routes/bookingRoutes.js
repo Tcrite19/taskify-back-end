@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-// const isLoggedIn = require('../middleware/isLoggedIn');
-// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 
 router.post('/address',(req, res) => {
     req.session.booking = { service: req.body.service };  
