@@ -9,7 +9,7 @@ const SALT_LENGTH = 12;
 
 router.post("/signup", async (req, res) => {
   try {
-    console.log("----- checking API -----", req.body);
+    console.log("----- checking API signup -----", req.body);
     const userInDatabase = await User.findOne({ username: req.body.username });
     if (userInDatabase) {
       return res.status(400).json({ error: "Username already taken." });
@@ -33,6 +33,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  console.log("----- checking API login -----", req.body);
   try {
     const user = await User.findOne({ username: req.body.username });
     if (user && bcrypt.compareSync(req.body.password, user.hashedPassword)) {
@@ -50,6 +51,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/", verifyToken, async (req, res) => {
+  console.log("----- checking API create -----", req.body);
   try {
     const { username, password, firstName, lastName, address, email } =
       req.body;
@@ -70,6 +72,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  console.log("----- checking API get users -----", req.body);
   try {
     const users = await User.find();
     res.status(200).json({ users });
