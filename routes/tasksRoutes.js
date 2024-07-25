@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Task = require("../models/Task");
-const verifyToken = require("../middleware/auth");
+const { Task } = require("../models/");
+const verifyToken = require("../middleware/verify-token");
 
 router.get("/", verifyToken, async (req, res) => {
   try {
     const tasks = await Task.find();
+    console.log("--- tasks:", tasks);
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -14,8 +15,9 @@ router.get("/", verifyToken, async (req, res) => {
 
 router.post("/", verifyToken, async (req, res) => {
   const task = new task({
-    title: req.body.title,
-    artist: req.body.artist,
+    name: req.body.name,
+    description: req.body.description,
+    booked: req.body.booked,
   });
 
   try {
@@ -33,8 +35,10 @@ router.put("/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    task.title = req.body.title;
-    task.artist = req.body.artist;
+    task.name = req.body.name;
+    task.description = req.body.description;
+    task.booked = req.body.booked;
+
     const updatedTask = await task.save();
     res.json(updatedTask);
   } catch (err) {
@@ -58,7 +62,9 @@ router.get("/", verifyToken, async (req, res) => {
   try {
     const name = req.query.name;
     if (name) {
-      const tasks = await Task.find({ name: { $regex: new RegExp(name, "i") } });
+      const tasks = await Task.find({
+        name: { $regex: new RegExp(name, "i") },
+      });
       res.json(tasks);
     } else {
       const tasks = await Task.find();
